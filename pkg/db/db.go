@@ -2,7 +2,11 @@ package db
 
 import (
 	"database/sql"
+	"log"
 
+	"github.com/golang-migrate/migrate/v4"
+	"github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/lib/pq"
 )
 
@@ -10,10 +14,7 @@ type Postgres struct {
 	DB *sql.DB
 }
 
-func (p *Postgres) Connect(user string, password string, dbname string, host string, port string) error {
-	//conn := "user=postgres password=132457689090iop dbname=school_go host=localhost port=5432 sslmode=disable"
-	//go run cmd/app/main.go --user=postgres --password=132457689090iop --dbname=school_go --host=localhost --port=5432
-	conn := "user=" + user + " password=" + password + " dbname=" + dbname + " host=" + host + " port=" + port + " sslmode=disable"
+func (p *Postgres) Connect(conn string) error {
 
 	var err error
 
@@ -42,7 +43,11 @@ func (p *Postgres) Close() {
 }
 
 func (p *Postgres) ConnectAndTest(user string, password string, dbname string, host string, port string) error {
-	err := p.Connect(user, password, dbname, host, port)
+	//conn := "user=postgres password=132457689090iop dbname=school_go host=localhost port=5432 sslmode=disable"
+	//go run cmd/app/main.go --user=postgres --password=132457689090iop --dbname=school_go --host=localhost --port=5432
+	conn := "user=" + user + " password=" + password + " dbname=" + dbname + " host=" + host + " port=" + port + " sslmode=disable"
+
+	err := p.Connect(conn)
 	if err != nil {
 		return err
 	}
@@ -51,6 +56,27 @@ func (p *Postgres) ConnectAndTest(user string, password string, dbname string, h
 	if err != nil {
 		return err
 	}
+
+	println("Successfully connected to database")
+
+	driver, err := postgres.WithInstance(p.DB, &postgres.Config{})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	migration, err := migrate.NewWithDatabaseInstance(
+		"file://migrations",
+		"postgres", driver,
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if err := migration.Up(); err != nil && err != migrate.ErrNoChange {
+		log.Fatal(err)
+	}
+
+	println("Successfully migrated database schema")
 
 	return nil
 }

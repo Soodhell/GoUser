@@ -24,6 +24,6 @@ func main() {
 
 	<-stop
 
-	fmt.Println("Приложение закончило работу")
+	fmt.Println("\nApplication stopped work")
 
 }
