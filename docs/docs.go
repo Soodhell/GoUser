@@ -173,7 +173,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/account/sing-in": {
+        "/account/sign-in": {
             "post": {
                 "description": "authenticate user and get JWT token",
                 "consumes": [
@@ -219,7 +219,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/account/sing-up": {
+        "/account/sign-up": {
             "post": {
                 "description": "register new user",
                 "consumes": [

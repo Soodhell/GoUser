@@ -6,6 +6,8 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+
+	_ "User/docs"
 )
 
 // @title User API

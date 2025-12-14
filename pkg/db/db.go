@@ -12,6 +12,7 @@ type Postgres struct {
 
 func (p *Postgres) Connect(user string, password string, dbname string, host string, port string) error {
 	//conn := "user=postgres password=132457689090iop dbname=school_go host=localhost port=5432 sslmode=disable"
+	//go run cmd/app/main.go --user=postgres --password=132457689090iop --dbname=school_go --host=localhost --port=5432
 	conn := "user=" + user + " password=" + password + " dbname=" + dbname + " host=" + host + " port=" + port + " sslmode=disable"
 
 	var err error

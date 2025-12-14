@@ -165,7 +165,7 @@ paths:
       summary: Activate user
       tags:
       - User
-  /account/sing-in:
+  /account/sign-in:
     post:
       consumes:
       - multipart/form-data
@@ -196,7 +196,7 @@ paths:
       summary: Authenticate user
       tags:
       - User
-  /account/sing-up:
+  /account/sign-up:
     post:
       consumes:
       - multipart/form-data
