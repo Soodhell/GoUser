@@ -1,0 +1,283 @@
+definitions:
+  DTO.ResponseError:
+    properties:
+      error:
+        type: string
+    type: object
+  DTO.ResponseSuccess:
+    properties:
+      mail:
+        type: string
+      roles:
+        type: integer
+      success:
+        type: boolean
+    type: object
+  DTO.ResponseToken:
+    properties:
+      success:
+        type: boolean
+      token:
+        type: string
+    type: object
+  DTO.ReturnUser:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      image:
+        type: string
+      name:
+        type: string
+      roles:
+        type: integer
+    type: object
+host: localhost:12543
+info:
+  contact: {}
+  description: API server
+  title: User API
+  version: "1.0"
+paths:
+  /account:
+    get:
+      description: get user info using JWT token
+      operationId: get-user-jwt
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/DTO.ReturnUser'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/DTO.ResponseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/DTO.ResponseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Get user by JWT
+      tags:
+      - User
+  /account/{email}:
+    get:
+      description: get user info by email
+      operationId: get-user-by-email
+      parameters:
+      - description: User email
+        in: path
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/DTO.ReturnUser'
+        "404":
+          description: Not Found
+      summary: Get user by email
+      tags:
+      - User
+  /account/delete:
+    delete:
+      description: deactivate user account
+      operationId: deactivate-user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/DTO.ResponseSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/DTO.ResponseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/DTO.ResponseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Deactivate user
+      tags:
+      - User
+  /account/img/{image}:
+    get:
+      description: get image
+      operationId: get-image
+      parameters:
+      - description: Image name
+        in: path
+        name: image
+        required: true
+        type: string
+      produces:
+      - application/octet-stream
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/DTO.ResponseError'
+      summary: Get image
+      tags:
+      - Image
+  /account/recovery:
+    post:
+      consumes:
+      - multipart/form-data
+      description: activate user account
+      operationId: activate-user
+      parameters:
+      - description: Email
+        in: formData
+        name: email
+        required: true
+        type: string
+      - description: Password
+        in: formData
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/DTO.ResponseToken'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/DTO.ResponseError'
+      summary: Activate user
+      tags:
+      - User
+  /account/sing-in:
+    post:
+      consumes:
+      - multipart/form-data
+      description: authenticate user and get JWT token
+      operationId: authenticate-user
+      parameters:
+      - description: Email
+        in: formData
+        name: email
+        required: true
+        type: string
+      - description: Password
+        in: formData
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/DTO.ResponseToken'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/DTO.ResponseError'
+      summary: Authenticate user
+      tags:
+      - User
+  /account/sing-up:
+    post:
+      consumes:
+      - multipart/form-data
+      description: register new user
+      operationId: register-user
+      parameters:
+      - description: Email
+        in: formData
+        name: email
+        required: true
+        type: string
+      - description: Password
+        in: formData
+        name: password
+        required: true
+        type: string
+      - description: Name
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: Avatar
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/DTO.ResponseSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/DTO.ResponseError'
+      summary: Register user
+      tags:
+      - User
+  /account/update:
+    patch:
+      consumes:
+      - multipart/form-data
+      description: update user
+      operationId: update-user
+      parameters:
+      - description: New email
+        in: formData
+        name: email
+        type: string
+      - description: New password
+        in: formData
+        name: password
+        type: string
+      - description: New name
+        in: formData
+        name: name
+        type: string
+      - description: New avatar
+        in: formData
+        name: file
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/DTO.ResponseSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/DTO.ResponseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/DTO.ResponseError'
+      security:
+      - ApiKeyAuth: []
+      summary: Update user
+      tags:
+      - User
+swagger: "2.0"

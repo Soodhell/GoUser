@@ -1,0 +1,8 @@
+"CREATE TABLE date_user (date_user date NOT NULL PRIMARY KEY, user_id integer NOT NULL PRIMARY KEY);"
+"CREATE TABLE news (id integer NOT NULL PRIMARY KEY, title character varying(255), content text, id_user integer);"
+"CREATE TABLE news_images (id integer NOT NULL PRIMARY KEY, id_news integer, path_image text, name_image text);"
+"CREATE TABLE newsv1 (id integer NOT NULL PRIMARY KEY, title character varying(255) NOT NULL, content text NOT NULL);"
+"CREATE TABLE section_register (section_id integer NOT NULL PRIMARY KEY, user_id integer NOT NULL PRIMARY KEY);"
+"CREATE TABLE sections (id integer NOT NULL PRIMARY KEY, title character varying(255), content text);"
+"CREATE TABLE sections_image (id integer NOT NULL PRIMARY KEY, id_section integer, path_image text, name_image text);"
+"CREATE TABLE users (id integer NOT NULL PRIMARY KEY, email text, name text, password text, path_image text, name_image text, is_active boolean, roles integer);"
