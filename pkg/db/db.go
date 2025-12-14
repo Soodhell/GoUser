@@ -10,8 +10,9 @@ type Postgres struct {
 	DB *sql.DB
 }
 
-func (p *Postgres) Connect() error {
-	conn := "user=postgres password=132457689090iop dbname=school_go host=localhost port=5432 sslmode=disable"
+func (p *Postgres) Connect(user string, password string, dbname string, host string, port string) error {
+	//conn := "user=postgres password=132457689090iop dbname=school_go host=localhost port=5432 sslmode=disable"
+	conn := "user=" + user + " password=" + password + " dbname=" + dbname + " host=" + host + " port=" + port + " sslmode=disable"
 
 	var err error
 
@@ -39,8 +40,8 @@ func (p *Postgres) Close() {
 	}
 }
 
-func (p *Postgres) ConnectAndTest() error {
-	err := p.Connect()
+func (p *Postgres) ConnectAndTest(user string, password string, dbname string, host string, port string) error {
+	err := p.Connect(user, password, dbname, host, port)
 	if err != nil {
 		return err
 	}

@@ -1,8 +1,50 @@
-"CREATE TABLE date_user (date_user date NOT NULL PRIMARY KEY, user_id integer NOT NULL PRIMARY KEY);"
-"CREATE TABLE news (id integer NOT NULL PRIMARY KEY, title character varying(255), content text, id_user integer);"
-"CREATE TABLE news_images (id integer NOT NULL PRIMARY KEY, id_news integer, path_image text, name_image text);"
-"CREATE TABLE newsv1 (id integer NOT NULL PRIMARY KEY, title character varying(255) NOT NULL, content text NOT NULL);"
-"CREATE TABLE section_register (section_id integer NOT NULL PRIMARY KEY, user_id integer NOT NULL PRIMARY KEY);"
-"CREATE TABLE sections (id integer NOT NULL PRIMARY KEY, title character varying(255), content text);"
-"CREATE TABLE sections_image (id integer NOT NULL PRIMARY KEY, id_section integer, path_image text, name_image text);"
-"CREATE TABLE users (id integer NOT NULL PRIMARY KEY, email text, name text, password text, path_image text, name_image text, is_active boolean, roles integer);"
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+CREATE TABLE public.users (
+                              id integer NOT NULL,
+                              email text NOT NULL,
+                              name text NOT NULL,
+                              password text NOT NULL,
+                              path_image text,
+                              name_image text,
+                              is_active boolean NOT NULL,
+                              roles integer DEFAULT 0
+);
+
+ALTER TABLE public.users OWNER TO postgres;
+
+CREATE SEQUENCE public.users_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+ALTER SEQUENCE public.users_id_seq OWNER TO postgres;
+
+ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
+
+ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
+
+SELECT pg_catalog.setval('public.users_id_seq', 18, true);
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT unique_email UNIQUE (email);
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);

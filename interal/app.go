@@ -7,12 +7,28 @@ import (
 	"User/interal/services"
 	"User/pkg/db"
 	"User/pkg/http"
+	"flag"
 )
 
 func StartApp() {
 
 	var DB db.Postgres
-	err := DB.ConnectAndTest()
+
+	var user string
+	var password string
+	var dbname string
+	var host string
+	var port string
+
+	flag.StringVar(&user, "user", "", "postgres user")
+	flag.StringVar(&password, "password", "", "postgres password")
+	flag.StringVar(&dbname, "dbname", "", "postgres database name")
+	flag.StringVar(&host, "host", "", "postgres host")
+	flag.StringVar(&port, "port", "", "postgres port")
+
+	flag.Parse()
+
+	err := DB.ConnectAndTest(user, password, dbname, host, port)
 	defer DB.Close()
 
 	if err != nil {

@@ -7,12 +7,13 @@ import (
 	"User/interal/services"
 	"encoding/json"
 	"errors"
-	"github.com/gorilla/mux"
-	_ "github.com/gorilla/mux"
-	"golang.org/x/crypto/bcrypt"
 	"net/http"
 	"os"
 	"strings"
+
+	"github.com/gorilla/mux"
+	_ "github.com/gorilla/mux"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserController struct {
@@ -27,8 +28,8 @@ func (u *UserController) GetController() map[string]func(http.ResponseWriter, *h
 
 	controllers := make(map[string]func(http.ResponseWriter, *http.Request))
 
-	controllers["/account/sing-up"] = u.Reg
-	controllers["/account/sing-in"] = u.Auth
+	controllers["/account/sign-up"] = u.Reg
+	controllers["/account/sign-in"] = u.Auth
 	controllers["/account/{email}"] = u.GetUser
 	controllers["/account"] = u.GetUserJWT
 	controllers["/account/update"] = u.Update
@@ -43,8 +44,8 @@ func (u *UserController) GetMethod() map[string]string {
 
 	methods := make(map[string]string)
 
-	methods["/account/sing-up"] = "POST"
-	methods["/account/sing-in"] = "POST"
+	methods["/account/sign-up"] = "POST"
+	methods["/account/sign-in"] = "POST"
 	methods["/account/{email}"] = "GET"
 	methods["/account"] = "GET"
 	methods["/account/update"] = "PATCH"
@@ -227,7 +228,7 @@ func (u *UserController) GetUserJWT(w http.ResponseWriter, r *http.Request) {
 // @Param file formData file true "Avatar"
 // @Success 200 {object} DTO.ResponseSuccess
 // @Failure 400 {object} DTO.ResponseError
-// @Router /account/sing-up [POST]
+// @Router /account/sign-up [POST]
 func (u *UserController) Reg(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -269,7 +270,7 @@ func (u *UserController) Reg(w http.ResponseWriter, r *http.Request) {
 // @Param password formData string true "Password"
 // @Success 200 {object} DTO.ResponseToken
 // @Failure 400 {object} DTO.ResponseError
-// @Router /account/sing-in [POST]
+// @Router /account/sign-in [POST]
 func (u *UserController) Auth(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
