@@ -13,6 +13,7 @@ import (
 
 	"github.com/gorilla/mux"
 	_ "github.com/gorilla/mux"
+	httpSwagger "github.com/swaggo/http-swagger"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -24,36 +25,19 @@ func StartController(service services.Service) *UserController {
 	return &UserController{service}
 }
 
-func (u *UserController) GetController() map[string]func(http.ResponseWriter, *http.Request) {
+func (u *UserController) SettingRouter(router *mux.Router) {
 
-	controllers := make(map[string]func(http.ResponseWriter, *http.Request))
+	router.PathPrefix("/swagger/").Handler(httpSwagger.WrapHandler)
 
-	controllers["/account/sign-up"] = u.Reg
-	controllers["/account/sign-in"] = u.Auth
-	controllers["/account/{email}"] = u.GetUser
-	controllers["/account"] = u.GetUserJWT
-	controllers["/account/update"] = u.Update
-	controllers["/account/delete"] = u.UserNotActive
-	controllers["/account/recovery"] = u.UserActive
-	controllers["/account/img/{image}"] = u.GetImages
+	router.HandleFunc("/account/sign-up", u.Reg).Methods("POST")
+	router.HandleFunc("/account/sign-in", u.Auth).Methods("POST")
+	router.HandleFunc("/account/{email}", u.GetUser).Methods("GET")
+	router.HandleFunc("/account", u.GetUserJWT).Methods("GET")
+	router.HandleFunc("/account/update", u.Update).Methods("PATCH")
+	router.HandleFunc("/account/delete", u.UserNotActive).Methods("DELETE")
+	router.HandleFunc("/account/recovery", u.UserActive).Methods("POST")
+	router.HandleFunc("/account/img/{image}", u.GetImages).Methods("GET")
 
-	return controllers
-}
-
-func (u *UserController) GetMethod() map[string]string {
-
-	methods := make(map[string]string)
-
-	methods["/account/sign-up"] = "POST"
-	methods["/account/sign-in"] = "POST"
-	methods["/account/{email}"] = "GET"
-	methods["/account"] = "GET"
-	methods["/account/update"] = "PATCH"
-	methods["/account/delete"] = "DELETE"
-	methods["/account/recovery"] = "POST"
-	methods["/account/img/{image}"] = "GET"
-
-	return methods
 }
 
 // GetImages godoc

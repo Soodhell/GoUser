@@ -1,13 +1,14 @@
 package interal
 
 import (
-	"User/interal/config"
 	"User/interal/controllers"
 	"User/interal/repositories"
 	"User/interal/services"
 	"User/pkg/db"
 	"User/pkg/http"
 	"flag"
+
+	"github.com/gorilla/mux"
 )
 
 func StartApp() {
@@ -39,9 +40,9 @@ func StartApp() {
 	ser := services.StartService(*rep)
 	con := controllers.StartController(*ser)
 
-	var listController []config.Controller
-	listController = append(listController, con)
+	router := mux.NewRouter()
+	con.SettingRouter(router)
 
-	http.Run(config.Search(listController))
+	http.Run(router)
 
 }
