@@ -2,6 +2,7 @@ package db
 
 import (
 	"database/sql"
+	"errors"
 	"log"
 
 	"github.com/golang-migrate/migrate/v4"
@@ -72,7 +73,7 @@ func (p *Postgres) ConnectAndTest(user string, password string, dbname string, h
 		log.Fatal(err)
 	}
 
-	if err := migration.Up(); err != nil && err != migrate.ErrNoChange {
+	if err := migration.Up(); err != nil && !errors.Is(err, migrate.ErrNoChange) {
 		log.Fatal(err)
 	}
 
